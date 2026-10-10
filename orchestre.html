@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>L’orchestre — Harmonie d’Olivet</title>
+  <meta name="description" content="L’Harmonie d’Olivet : histoire de l’orchestre créé en 2003, chiffres clés, répétitions et direction musicale.">
+  <meta property="og:title" content="L’orchestre — Harmonie d’Olivet">
+  <meta property="og:description" content="L’Harmonie d’Olivet : histoire de l’orchestre créé en 2003, chiffres clés, répétitions et direction musicale.">
+  <meta property="og:image" content="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/media/thumbs/md/legacy/site/bandeau-2024.jpg">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://kdcflcvufukagdjycwww.supabase.co" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css?v=6">
+</head>
+<body data-page="orchestre">
+  <a class="skip" href="#main">Aller au contenu</a>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="g-clef" viewBox="30 -1354 651 1772"><path id="g-clef-path"/></symbol></defs></svg>
+
+  <header class="topbar" id="topbar">
+    <a class="brand" href="index.html" aria-label="Harmonie d’Olivet, accueil">
+      <svg class="logo" viewBox="0 0 300 66" role="img" aria-label="Harmonie d’Olivet">
+        <text x="0" y="56" class="logo-h">h</text>
+        <ellipse cx="47" cy="42" rx="13" ry="14.5" class="logo-o" transform="rotate(-14 47 42)"/>
+        <text x="74" y="27" class="logo-orch">Orchestre</text>
+        <text x="74" y="56" class="logo-harm">Harmonie<tspan class="logo-d" dx="4">d’</tspan><tspan class="logo-ol">Olivet</tspan></text>
+      </svg>
+    </a>
+    <nav class="menu" id="menu" aria-label="Navigation principale">
+        <a href="index.html">Accueil</a>
+        <a href="orchestre.html" class="active" aria-current="page">L’orchestre</a>
+        <a href="agenda.html">Agenda</a>
+        <a href="actualites.html">Actualités</a>
+        <a href="stage.html">Stage d’été</a>
+        <a href="galerie.html">Galerie</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+    <div class="topbar-actions">
+      <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" title="Activer le son des notes">
+        <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="sr">Son des notes</span>
+      </button>
+      <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="menu"><span></span><span></span><span class="sr">Menu</span></button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <header class="page-head">
+      <div class="wrap">
+        <div class="title-staff">
+          <div class="page-staff" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+          <svg class="page-clef" aria-hidden="true"><use href="#g-clef"/></svg>
+          <h1 class="page-title" data-k="orchestre.titre">L’Orchestre</h1>
+        </div>
+        <p class="page-lede" data-k="orchestre.intro"></p>
+      </div>
+    </header>
+    <section class="sec paper">
+      <div class="wrap">
+        <div class="orch-grid">
+          <div class="rich" data-k="orchestre.texte" data-rich data-reveal></div>
+          <div class="rehearsal" data-reveal>
+            <div class="rehearsal-metro" aria-hidden="true">
+              <svg viewBox="0 0 120 160"><path d="M30 150 L50 20 L70 20 L90 150 Z" class="metro-body"/><g class="metro-swing"><line x1="60" y1="140" x2="60" y2="40" class="metro-arm"/><circle cx="60" cy="70" r="6" class="metro-weight"/></g></svg>
+            </div>
+            <div>
+              <h2 class="rh-title">Répétitions</h2>
+              <p class="big-serif" data-k="orchestre.repetitions"></p>
+              <p data-k="orchestre.lieu_repetitions"></p>
+              <p class="muted" data-k="orchestre.adhesion"></p>
+              <a class="btn btn-bronze btn-sm" href="contact.html?sujet=rejoindre">Venir essayer</a>
+            </div>
+          </div>
+        </div>
+        <div class="measures" id="measures" aria-label="L’orchestre en chiffres" data-reveal></div>
+      </div>
+      <div class="reel" aria-label="Photos de l’orchestre">
+        <div class="reel-track" id="orchReelTrack"></div>
+      </div>
+    </section>
+
+    <section class="sec dark" id="direction">
+      <div class="wrap dir-grid">
+        <figure class="dir-portrait" data-reveal>
+          <div class="dir-frame"><img id="dirPortrait" alt="Portrait du directeur musical" loading="lazy" decoding="async"></div>
+          <svg class="beat" viewBox="0 0 400 400" aria-hidden="true">
+            <path class="beat-glow" d="M200 70 C 205 150, 200 230, 196 300 C 195 320, 210 318, 214 300 C 190 280, 120 240, 80 220 C 66 214, 70 200, 84 208 C 160 230, 260 236, 320 220 C 336 216, 336 232, 322 236 C 280 220, 240 160, 205 90"/>
+            <path class="beat-line" d="M200 70 C 205 150, 200 230, 196 300 C 195 320, 210 318, 214 300 C 190 280, 120 240, 80 220 C 66 214, 70 200, 84 208 C 160 230, 260 236, 320 220 C 336 216, 336 232, 322 236 C 280 220, 240 160, 205 90"/>
+          </svg>
+          <figcaption>La battue à quatre temps</figcaption>
+        </figure>
+        <div class="dir-text">
+          <h2 class="sub-title" data-k="direction.titre">Direction musicale</h2>
+          <p class="dir-name"><span data-k="direction.nom"></span><small data-k="direction.role"></small></p>
+          <div class="rich" data-k="direction.texte" data-rich></div>
+          <ol class="jalons" id="jalons" aria-label="Parcours" data-reveal></ol>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <a class="brand" href="index.html" aria-label="Accueil"><svg class="logo" viewBox="0 0 300 66" role="img" aria-label="Harmonie d’Olivet">
+        <text x="0" y="56" class="logo-h">h</text>
+        <ellipse cx="47" cy="42" rx="13" ry="14.5" class="logo-o" transform="rotate(-14 47 42)"/>
+        <text x="74" y="27" class="logo-orch">Orchestre</text>
+        <text x="74" y="56" class="logo-harm">Harmonie<tspan class="logo-d" dx="4">d’</tspan><tspan class="logo-ol">Olivet</tspan></text>
+      </svg></a>
+      <nav class="foot-nav" aria-label="Pages du site">
+          <a href="index.html">Accueil</a>
+          <a href="orchestre.html">L’orchestre</a>
+          <a href="agenda.html">Agenda</a>
+          <a href="actualites.html">Actualités</a>
+          <a href="stage.html">Stage d’été</a>
+          <a href="galerie.html">Galerie</a>
+          <a href="contact.html">Contact</a>
+      </nav>
+      <div class="foot-side">
+        <p class="pre muted small" data-k="contact.adresse"></p>
+        <div class="socials" data-socials></div>
+      </div>
+    </div>
+    <div class="wrap foot-bottom">
+      <div class="partners" id="partners"></div>
+      <p class="copy">© 2003–<span id="year">2026</span> Harmonie d’Olivet · <a href="admin.html">Espace admin</a></p>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visionneuse" hidden>
+    <button class="lb-close" type="button" aria-label="Fermer">×</button>
+    <button class="lb-prev" type="button" aria-label="Image précédente">‹</button>
+    <figure><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
+    <button class="lb-next" type="button" aria-label="Image suivante">›</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" defer></script>
+  <script src="assets/js/config.js?v=6" defer></script>
+  <script src="assets/js/glyphs.js?v=6" defer></script>
+  <script src="assets/js/defaults.js?v=6" defer></script>
+  <script src="assets/js/site.js?v=6" defer></script>
+</body>
+</html>

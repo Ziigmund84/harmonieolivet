@@ -1,8 +1,8 @@
 # Harmonie d'Olivet — site web
 
-Site one page de l'Orchestre d'Harmonie d'Olivet, avec espace d'administration.
+Site de l'Orchestre d'Harmonie d'Olivet, avec espace d'administration.
 
-- **Site public** : `index.html`
+- **Pages publiques** : `index.html` (accueil), `orchestre.html`, `agenda.html`, `actualites.html`, `stage.html`, `galerie.html`, `contact.html`
 - **Administration** : `admin.html` (connexion par e-mail et mot de passe)
 
 ## Fonctionnement
@@ -34,15 +34,20 @@ Si Supabase est injoignable, le site affiche les textes par défaut de `assets/j
 ## Structure
 
 ```
-index.html            page publique
+*.html                pages publiques (générées par outils/pages.py)
 admin.html            administration
+outils/pages.py       gabarit commun : menu, en-tête, pied de page et structure de chaque page
 assets/css/site.css   styles du site
 assets/css/admin.css  styles de l'administration
-assets/js/site.js     rendu, animations (GSAP, Lenis), son, formulaire
+assets/js/site.js     chargement des contenus, animations légères, son, formulaire
 assets/js/admin.js    administration
 assets/js/defaults.js contenus par défaut
 assets/js/glyphs.js   symboles musicaux vectoriels (Noto Music, licence SIL OFL)
 assets/js/config.js   URL et clé publique Supabase
 ```
 
-Polices : Bodoni Moda et Instrument Sans (Google Fonts). Bibliothèques : GSAP + ScrollTrigger, Lenis, supabase-js (CDN).
+Pour modifier le menu ou la structure d'une page : éditer `outils/pages.py` puis lancer
+`python3 outils/pages.py` depuis la racine. Les textes, eux, se modifient dans l'admin.
+
+Polices : Bodoni Moda et Instrument Sans (Google Fonts). Seule bibliothèque : supabase-js (CDN).
+Les animations sont en CSS ; aucune bibliothèque d'animation n'est chargée.

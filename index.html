@@ -3,25 +3,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Harmonie d'Olivet — Orchestre d'harmonie</title>
-  <meta name="description" content="L'Harmonie d'Olivet, orchestre d'harmonie créé en 2003 à Olivet (Loiret) : concerts, agenda, stage d'orchestre d'été, photos et contact.">
-  <meta property="og:title" content="Harmonie d'Olivet — Orchestre d'harmonie">
-  <meta property="og:description" content="Une soixantaine de musiciens, une douzaine de concerts par saison et un stage d'orchestre chaque été à Olivet.">
-  <meta property="og:image" content="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/media/legacy/site/bandeau-2024.jpg">
+  <title>Harmonie d’Olivet — Orchestre d’harmonie</title>
+  <meta name="description" content="L’Harmonie d’Olivet, orchestre d’harmonie créé en 2003 à Olivet (Loiret) : concerts, stage d’orchestre d’été, photos et contact.">
+  <meta property="og:title" content="Harmonie d’Olivet — Orchestre d’harmonie">
+  <meta property="og:description" content="L’Harmonie d’Olivet, orchestre d’harmonie créé en 2003 à Olivet (Loiret) : concerts, stage d’orchestre d’été, photos et contact.">
+  <meta property="og:image" content="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/media/thumbs/md/legacy/site/bandeau-2024.jpg">
   <meta name="theme-color" content="#000000">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/site.css?v=5">
+  <link rel="preconnect" href="https://kdcflcvufukagdjycwww.supabase.co" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css?v=6">
 </head>
-<body>
-  <a class="skip" href="#orchestre">Aller au contenu</a>
+<body data-page="accueil">
+  <a class="skip" href="#main">Aller au contenu</a>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="g-clef" viewBox="30 -1354 651 1772"><path id="g-clef-path"/></symbol></defs></svg>
 
-  <!-- Barre du haut -->
-  <header class="topbar" id="topbar">
-    <a class="brand" href="#ouverture" aria-label="Harmonie d'Olivet, retour en haut">
-      <svg class="logo" viewBox="0 0 300 66" role="img" aria-hidden="true">
+  <header class="topbar on-hero" id="topbar">
+    <a class="brand" href="index.html" aria-label="Harmonie d’Olivet, accueil">
+      <svg class="logo" viewBox="0 0 300 66" role="img" aria-label="Harmonie d’Olivet">
         <text x="0" y="56" class="logo-h">h</text>
         <ellipse cx="47" cy="42" rx="13" ry="14.5" class="logo-o" transform="rotate(-14 47 42)"/>
         <text x="74" y="27" class="logo-orch">Orchestre</text>
@@ -29,270 +30,89 @@
       </svg>
     </a>
     <nav class="menu" id="menu" aria-label="Navigation principale">
-      <a href="#orchestre">L’orchestre</a>
-      <a href="#direction">Direction</a>
-      <a href="#agenda">Agenda</a>
-      <a href="#actualites">Actualités</a>
-      <a href="#stage">Stage</a>
-      <a href="#galerie">Galerie</a>
-      <a href="#contact">Contact</a>
+        <a href="index.html" class="active" aria-current="page">Accueil</a>
+        <a href="orchestre.html">L’orchestre</a>
+        <a href="agenda.html">Agenda</a>
+        <a href="actualites.html">Actualités</a>
+        <a href="stage.html">Stage d’été</a>
+        <a href="galerie.html">Galerie</a>
+        <a href="contact.html">Contact</a>
     </nav>
     <div class="topbar-actions">
       <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" title="Activer le son des notes">
-        <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="sr">Son</span>
+        <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="sr">Son des notes</span>
       </button>
-      <a class="btn btn-bronze btn-sm hide-sm" href="#contact">Nous rejoindre</a>
       <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="menu"><span></span><span></span><span class="sr">Menu</span></button>
     </div>
   </header>
 
-  <!-- Portée de navigation verticale -->
-  <nav class="staff-nav" id="staffNav" aria-label="Sections">
-    <div class="staff-lines" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-    <div class="staff-playhead" id="playhead" aria-hidden="true"></div>
-    <ul id="staffNotes"></ul>
-  </nav>
-
-  <div class="scroll-progress" aria-hidden="true"><span id="progressBar"></span></div>
-  <div class="curtain" id="curtain" aria-hidden="true"><svg id="curtainClef" viewBox="0 0 711 1832"><path id="curtainPath"/></svg></div>
-
   <main id="main">
-    <!-- I. Ouverture -->
-    <section class="hero" id="ouverture" data-title="Ouverture" data-pitch="0">
+
+    <section class="hero" id="ouverture">
       <div class="hero-bg" aria-hidden="true">
         <img id="heroImage" src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/media/thumbs/md/legacy/site/bandeau-2024.jpg" alt="" fetchpriority="high">
         <div class="spot"></div>
       </div>
       <canvas class="strings" id="strings" aria-hidden="true"></canvas>
-      <svg class="hero-clef" id="heroClef" viewBox="0 0 711 1832" aria-hidden="true"><path id="heroClefPath"/></svg>
+      <svg class="hero-clef" id="heroClef" viewBox="30 -1354 651 1772" aria-hidden="true"><path id="heroClefPath"/></svg>
       <div class="hero-inner">
         <p class="hero-kicker" data-k="hero.surtitre">Orchestre d’harmonie · Olivet, Loiret</p>
-        <h1 class="hero-title"><span class="ht-line" data-k="hero.titre">Harmonie d’Olivet</span></h1>
+        <h1 class="hero-title" data-k="hero.titre">Harmonie d’Olivet</h1>
         <p class="hero-lede" data-k="hero.accroche"></p>
         <div class="hero-cta">
-          <a class="btn btn-bronze" href="#agenda" data-k="hero.bouton">Voir l’agenda</a>
-          <a class="btn btn-ghost" href="#contact" data-k="hero.bouton2">Rejoindre l’orchestre</a>
+          <a class="btn btn-bronze" href="agenda.html" data-k="hero.bouton">Voir l’agenda</a>
+          <a class="btn btn-ghost" href="contact.html" data-k="hero.bouton2">Rejoindre l’orchestre</a>
         </div>
       </div>
-      <div class="hero-next" id="heroNext" aria-hidden="true">
-        <span>Prochain rendez-vous</span>
-        <strong id="heroNextTitle">—</strong>
-        <em id="heroNextDate"></em>
-      </div>
-      <a class="scroll-cue" href="#orchestre" aria-label="Défiler vers l’orchestre">
-        <svg viewBox="0 0 40 70"><path class="cue-path" d=""/></svg>
-      </a>
     </section>
 
     <div class="ribbon" aria-hidden="true"><div class="ribbon-track" id="ribbon"></div></div>
 
-    <!-- II. L'orchestre -->
-    <section class="sec paper" id="orchestre" data-title="L’orchestre" data-pitch="1">
-      <div class="paper-staves" aria-hidden="true"></div>
-      <div class="wrap">
-        <header class="sec-head">
-          <span class="movement">II</span>
-          <h2 class="sec-title" data-k="orchestre.titre">L’Orchestre</h2>
-        </header>
-        <div class="orch-grid">
-          <p class="orch-intro reveal-words" data-k="orchestre.intro"></p>
-          <div class="orch-text rich" data-k="orchestre.texte" data-rich></div>
+    <section class="sec dark home-next">
+      <div class="wrap next-grid">
+        <div>
+          <h2 class="sub-title">Prochain rendez-vous</h2>
+          <div id="nextEvent" class="next-event"></div>
         </div>
-        <div class="measures" id="measures" aria-label="L’orchestre en chiffres"></div>
-        <div class="rehearsal">
-          <div class="rehearsal-metro" aria-hidden="true">
-            <svg viewBox="0 0 120 160"><path d="M30 150 L50 20 L70 20 L90 150 Z" class="metro-body"/><line x1="60" y1="140" x2="60" y2="40" class="metro-arm" id="metroArm"/><circle cx="60" cy="70" r="6" class="metro-weight" id="metroWeight"/></svg>
-          </div>
-          <div>
-            <h3>Répétitions</h3>
-            <p class="big" data-k="orchestre.repetitions"></p>
-            <p data-k="orchestre.lieu_repetitions"></p>
-            <p class="muted" data-k="orchestre.adhesion"></p>
-            <a class="btn btn-bronze" href="#contact">Venir essayer</a>
-          </div>
-        </div>
-      </div>
-      <div class="reel" id="orchReel">
-        <div class="reel-track" id="orchReelTrack"></div>
-      </div>
-    </section>
-
-    <!-- III. Direction -->
-    <section class="sec dark" id="direction" data-title="Direction" data-pitch="2">
-      <div class="wrap dir-grid">
-        <figure class="dir-portrait">
-          <div class="dir-frame"><img id="dirPortrait" alt="Portrait du directeur musical" loading="lazy"></div>
-          <svg class="beat" viewBox="0 0 400 400" aria-hidden="true">
-            <path id="beatPath" d="M200 70 C 205 150, 200 230, 196 300 C 195 320, 210 318, 214 300 C 190 280, 120 240, 80 220 C 66 214, 70 200, 84 208 C 160 230, 260 236, 320 220 C 336 216, 336 232, 322 236 C 280 220, 240 160, 205 90"/>
-            <circle r="7" class="beat-dot" id="beatDot" cx="200" cy="70"/>
-          </svg>
-          <figcaption>La battue à quatre temps</figcaption>
-        </figure>
-        <div class="dir-text">
-          <header class="sec-head">
-            <span class="movement">III</span>
-            <h2 class="sec-title" data-k="direction.titre">Direction musicale</h2>
-          </header>
-          <p class="dir-name"><span data-k="direction.nom"></span><small data-k="direction.role"></small></p>
-          <div class="rich" data-k="direction.texte" data-rich></div>
-          <ol class="jalons" id="jalons" aria-label="Parcours"></ol>
+        <div class="next-side">
+          <h2 class="sub-title">Répétitions</h2>
+          <p class="big-serif" data-k="orchestre.repetitions"></p>
+          <p class="muted" data-k="orchestre.lieu_repetitions"></p>
+          <a class="btn btn-ghost btn-sm" href="contact.html?sujet=rejoindre">Venir essayer</a>
         </div>
       </div>
     </section>
 
-    <!-- IV. Agenda -->
-    <section class="sec bronze" id="agenda" data-title="Agenda" data-pitch="3">
+    <section class="sec paper">
       <div class="wrap">
-        <header class="sec-head">
-          <span class="movement">IV</span>
-          <h2 class="sec-title">L’Agenda</h2>
-        </header>
-        <div class="agenda-staff" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
-        <ol class="events" id="events"></ol>
-        <div class="events-empty" id="eventsEmpty" hidden>
-          <svg viewBox="0 0 711 400" aria-hidden="true"><path id="fermataPath"/></svg>
-          <div>
-            <p><strong>Point d’orgue.</strong> Les prochaines dates de la saison seront bientôt annoncées.</p>
-            <a class="btn btn-dark" href="https://www.facebook.com/harmonie.olivet" target="_blank" rel="noopener" id="agendaFb">Suivre l’orchestre sur Facebook</a>
-          </div>
+        <div class="row-head">
+          <h2 class="sub-title">Actualités</h2>
+          <a class="link-more" href="actualites.html">Toutes les actualités</a>
         </div>
-        <details class="past" id="pastWrap" hidden>
-          <summary>Concerts passés</summary>
-          <ol class="events past-events" id="pastEvents"></ol>
-        </details>
+        <div class="posts posts-home" id="posts" data-limit="3"></div>
       </div>
     </section>
 
-    <!-- V. Actualités -->
-    <section class="sec paper" id="actualites" data-title="Actualités" data-pitch="4">
-      <div class="paper-staves" aria-hidden="true"></div>
+    <section class="sec dark">
       <div class="wrap">
-        <header class="sec-head">
-          <span class="movement">V</span>
-          <h2 class="sec-title">Actualités</h2>
-        </header>
-        <div class="posts" id="posts"></div>
-      </div>
-    </section>
-
-    <!-- VI. Stage -->
-    <section class="sec dark stage" id="stage" data-title="Stage d’été" data-pitch="5">
-      <div class="wrap">
-        <header class="sec-head">
-          <span class="movement">VI</span>
-          <h2 class="sec-title" data-k="stage.titre">Stage d’orchestre d’été</h2>
-          <p class="sec-sub" data-k="stage.edition"></p>
-        </header>
-        <div class="stage-top">
-          <p class="stage-intro reveal-words" data-k="stage.intro"></p>
-          <div class="stage-dates">
-            <span class="sd-label">Dates</span>
-            <strong data-k="stage.dates"></strong>
-            <span data-k="stage.direction"></span>
-          </div>
-        </div>
-
-        <div class="seating">
-          <svg id="seating" viewBox="0 0 900 520" role="img" aria-labelledby="seatingTitle">
-            <title id="seatingTitle">Plan de l’orchestre du stage : nombre de places par pupitre</title>
-          </svg>
-          <div class="seating-legend">
-            <p class="seating-total"><strong id="seatTotal">0</strong> musiciens</p>
-            <p class="muted">Effectif limité. Survolez un pupitre pour voir le nombre de places.</p>
-            <p class="seat-hover" id="seatHover" aria-live="polite"></p>
-          </div>
-        </div>
-
-        <div class="stage-info">
-          <div class="si">
-            <h3>Le stage</h3>
-            <p data-k="stage.lieu_stage"></p>
-          </div>
-          <div class="si">
-            <h3>Le concert</h3>
-            <p data-k="stage.lieu_concert"></p>
-          </div>
-          <div class="si">
-            <h3>Une journée type</h3>
-            <p data-k="stage.horaires"></p>
-          </div>
-          <div class="si price">
-            <h3>Tarif</h3>
-            <p class="price-big" data-k="stage.tarif"></p>
-            <p data-k="stage.tarif_reduit"></p>
-            <p class="muted small" data-k="stage.conditions"></p>
-          </div>
-        </div>
-        <div class="stage-cta">
-          <a class="btn btn-bronze" id="stageInscription" href="#" target="_blank" rel="noopener">S’inscrire au stage</a>
-          <button class="btn btn-ghost" type="button" id="stageAffiche">Voir l’affiche</button>
-        </div>
-      </div>
-      <div class="stage-mosaic" id="stagePhotos"></div>
-    </section>
-
-    <!-- VII. Galerie -->
-    <section class="sec paper" id="galerie" data-title="Galerie" data-pitch="6">
-      <div class="paper-staves" aria-hidden="true"></div>
-      <div class="wrap">
-        <header class="sec-head">
-          <span class="movement">VII</span>
-          <h2 class="sec-title">Galerie</h2>
-        </header>
-        <div class="tabs" role="tablist" aria-label="Type de médias">
-          <button role="tab" aria-selected="true" data-tab="photo">Photos</button>
-          <button role="tab" aria-selected="false" data-tab="visuel">Affiches</button>
-          <button role="tab" aria-selected="false" data-tab="presse">Presse</button>
-        </div>
-        <div class="gallery" id="gallery" role="tabpanel"></div>
-        <button class="btn btn-dark more" id="galleryMore" type="button" hidden>Afficher plus</button>
-      </div>
-    </section>
-
-    <!-- VIII. Contact -->
-    <section class="sec dark contact" id="contact" data-title="Contact" data-pitch="7">
-      <div class="wrap">
-        <header class="sec-head">
-          <span class="movement">VIII</span>
-          <h2 class="sec-title" data-k="contact.titre">Contact</h2>
-        </header>
-        <div class="contact-grid">
-          <form class="contact-form" id="contactForm" novalidate>
-            <p class="lead" data-k="contact.intro"></p>
-            <div class="field"><label for="cName">Nom</label><input id="cName" name="name" required maxlength="120" autocomplete="name"></div>
-            <div class="field"><label for="cEmail">E-mail</label><input id="cEmail" name="email" type="email" required maxlength="200" autocomplete="email"></div>
-            <div class="field"><label for="cSubject">Objet</label>
-              <select id="cSubject" name="subject">
-                <option>Rejoindre l’orchestre</option>
-                <option>Stage d’été</option>
-                <option>Inviter l’Harmonie pour un concert</option>
-                <option>Autre demande</option>
-              </select>
-            </div>
-            <div class="field"><label for="cBody">Message</label><textarea id="cBody" name="body" rows="5" required maxlength="5000"></textarea></div>
-            <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-            <button class="btn btn-bronze" type="submit">Envoyer le message</button>
-            <p class="form-status" id="formStatus" role="status"></p>
-          </form>
-          <aside class="contact-side">
-            <div>
-              <h3>Adresse</h3>
-              <p class="pre" data-k="contact.adresse"></p>
-            </div>
-            <div>
-              <h3>Écrire</h3>
-              <p><a id="contactEmail" href="#"></a></p>
-              <p id="contactPhoneWrap" hidden><a id="contactPhone" href="#"></a></p>
-            </div>
-            <div>
-              <h3>Répétitions</h3>
-              <p data-k="orchestre.repetitions"></p>
-              <p class="muted" data-k="orchestre.lieu_repetitions"></p>
-            </div>
-            <div class="socials" id="socials"></div>
-            <div class="map" id="map"></div>
-          </aside>
+        <h2 class="sub-title">Découvrir l’Harmonie</h2>
+        <div class="cards">
+          <a class="card" href="orchestre.html" data-reveal>
+            <span class="card-img"><img id="cardOrch" alt="" loading="lazy" decoding="async"></span>
+            <span class="card-body"><strong>L’orchestre</strong><span>Son histoire, ses chiffres et son chef.</span></span>
+          </a>
+          <a class="card" href="stage.html" data-reveal>
+            <span class="card-img"><img id="cardStage" alt="" loading="lazy" decoding="async"></span>
+            <span class="card-body"><strong>Le stage d’été</strong><span>Une semaine d’orchestre pour une centaine de musiciens.</span></span>
+          </a>
+          <a class="card" href="galerie.html" data-reveal>
+            <span class="card-img"><img id="cardGal" alt="" loading="lazy" decoding="async"></span>
+            <span class="card-body"><strong>La galerie</strong><span>Photos, affiches et articles de presse depuis 2004.</span></span>
+          </a>
+          <a class="card" href="contact.html" data-reveal>
+            <span class="card-img"><img id="cardContact" alt="" loading="lazy" decoding="async"></span>
+            <span class="card-body"><strong>Nous rejoindre</strong><span>Répétitions le mercredi soir au Conservatoire.</span></span>
+          </a>
         </div>
       </div>
     </section>
@@ -300,18 +120,32 @@
 
   <footer class="footer">
     <div class="wrap footer-grid">
-      <svg class="logo logo-foot" viewBox="0 0 300 66" aria-label="Harmonie d'Olivet" role="img">
+      <a class="brand" href="index.html" aria-label="Accueil"><svg class="logo" viewBox="0 0 300 66" role="img" aria-label="Harmonie d’Olivet">
         <text x="0" y="56" class="logo-h">h</text>
         <ellipse cx="47" cy="42" rx="13" ry="14.5" class="logo-o" transform="rotate(-14 47 42)"/>
         <text x="74" y="27" class="logo-orch">Orchestre</text>
         <text x="74" y="56" class="logo-harm">Harmonie<tspan class="logo-d" dx="4">d’</tspan><tspan class="logo-ol">Olivet</tspan></text>
-      </svg>
+      </svg></a>
+      <nav class="foot-nav" aria-label="Pages du site">
+          <a href="index.html">Accueil</a>
+          <a href="orchestre.html">L’orchestre</a>
+          <a href="agenda.html">Agenda</a>
+          <a href="actualites.html">Actualités</a>
+          <a href="stage.html">Stage d’été</a>
+          <a href="galerie.html">Galerie</a>
+          <a href="contact.html">Contact</a>
+      </nav>
+      <div class="foot-side">
+        <p class="pre muted small" data-k="contact.adresse"></p>
+        <div class="socials" data-socials></div>
+      </div>
+    </div>
+    <div class="wrap foot-bottom">
       <div class="partners" id="partners"></div>
-      <p class="copy">© 2003–<span id="year"></span> Harmonie d’Olivet · <a href="admin.html">Espace admin</a></p>
+      <p class="copy">© 2003–<span id="year">2026</span> Harmonie d’Olivet · <a href="admin.html">Espace admin</a></p>
     </div>
   </footer>
 
-  <!-- Visionneuse -->
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visionneuse" hidden>
     <button class="lb-close" type="button" aria-label="Fermer">×</button>
     <button class="lb-prev" type="button" aria-label="Image précédente">‹</button>
@@ -319,13 +153,10 @@
     <button class="lb-next" type="button" aria-label="Image suivante">›</button>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-  <script src="assets/js/config.js?v=5"></script>
-  <script src="assets/js/glyphs.js?v=5"></script>
-  <script src="assets/js/defaults.js?v=5"></script>
-  <script src="assets/js/site.js?v=5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" defer></script>
+  <script src="assets/js/config.js?v=6" defer></script>
+  <script src="assets/js/glyphs.js?v=6" defer></script>
+  <script src="assets/js/defaults.js?v=6" defer></script>
+  <script src="assets/js/site.js?v=6" defer></script>
 </body>
 </html>

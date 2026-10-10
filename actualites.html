@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Actualités — Harmonie d’Olivet</title>
+  <meta name="description" content="Toute l’actualité de l’Harmonie d’Olivet.">
+  <meta property="og:title" content="Actualités — Harmonie d’Olivet">
+  <meta property="og:description" content="Toute l’actualité de l’Harmonie d’Olivet.">
+  <meta property="og:image" content="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/media/thumbs/md/legacy/site/bandeau-2024.jpg">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://kdcflcvufukagdjycwww.supabase.co" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css?v=6">
+</head>
+<body data-page="actualites">
+  <a class="skip" href="#main">Aller au contenu</a>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="g-clef" viewBox="30 -1354 651 1772"><path id="g-clef-path"/></symbol></defs></svg>
+
+  <header class="topbar" id="topbar">
+    <a class="brand" href="index.html" aria-label="Harmonie d’Olivet, accueil">
+      <svg class="logo" viewBox="0 0 300 66" role="img" aria-label="Harmonie d’Olivet">
+        <text x="0" y="56" class="logo-h">h</text>
+        <ellipse cx="47" cy="42" rx="13" ry="14.5" class="logo-o" transform="rotate(-14 47 42)"/>
+        <text x="74" y="27" class="logo-orch">Orchestre</text>
+        <text x="74" y="56" class="logo-harm">Harmonie<tspan class="logo-d" dx="4">d’</tspan><tspan class="logo-ol">Olivet</tspan></text>
+      </svg>
+    </a>
+    <nav class="menu" id="menu" aria-label="Navigation principale">
+        <a href="index.html">Accueil</a>
+        <a href="orchestre.html">L’orchestre</a>
+        <a href="agenda.html">Agenda</a>
+        <a href="actualites.html" class="active" aria-current="page">Actualités</a>
+        <a href="stage.html">Stage d’été</a>
+        <a href="galerie.html">Galerie</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+    <div class="topbar-actions">
+      <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" title="Activer le son des notes">
+        <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="sr">Son des notes</span>
+      </button>
+      <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="menu"><span></span><span></span><span class="sr">Menu</span></button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <header class="page-head">
+      <div class="wrap">
+        <div class="title-staff">
+          <div class="page-staff" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+          <svg class="page-clef" aria-hidden="true"><use href="#g-clef"/></svg>
+          <h1 class="page-title">Actualités</h1>
+        </div>
+        <p class="page-lede" data-k="">Toute l’actualité de l’association.</p>
+      </div>
+    </header>
+    <section class="sec paper">
+      <div class="wrap">
+        <div class="posts" id="posts" data-limit="50"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <a class="brand" href="index.html" aria-label="Accueil"><svg class="logo" viewBox="0 0 300 66" role="img" aria-label="Harmonie d’Olivet">
+        <text x="0" y="56" class="logo-h">h</text>
+        <ellipse cx="47" cy="42" rx="13" ry="14.5" class="logo-o" transform="rotate(-14 47 42)"/>
+        <text x="74" y="27" class="logo-orch">Orchestre</text>
+        <text x="74" y="56" class="logo-harm">Harmonie<tspan class="logo-d" dx="4">d’</tspan><tspan class="logo-ol">Olivet</tspan></text>
+      </svg></a>
+      <nav class="foot-nav" aria-label="Pages du site">
+          <a href="index.html">Accueil</a>
+          <a href="orchestre.html">L’orchestre</a>
+          <a href="agenda.html">Agenda</a>
+          <a href="actualites.html">Actualités</a>
+          <a href="stage.html">Stage d’été</a>
+          <a href="galerie.html">Galerie</a>
+          <a href="contact.html">Contact</a>
+      </nav>
+      <div class="foot-side">
+        <p class="pre muted small" data-k="contact.adresse"></p>
+        <div class="socials" data-socials></div>
+      </div>
+    </div>
+    <div class="wrap foot-bottom">
+      <div class="partners" id="partners"></div>
+      <p class="copy">© 2003–<span id="year">2026</span> Harmonie d’Olivet · <a href="admin.html">Espace admin</a></p>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visionneuse" hidden>
+    <button class="lb-close" type="button" aria-label="Fermer">×</button>
+    <button class="lb-prev" type="button" aria-label="Image précédente">‹</button>
+    <figure><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure>
+    <button class="lb-next" type="button" aria-label="Image suivante">›</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" defer></script>
+  <script src="assets/js/config.js?v=6" defer></script>
+  <script src="assets/js/glyphs.js?v=6" defer></script>
+  <script src="assets/js/defaults.js?v=6" defer></script>
+  <script src="assets/js/site.js?v=6" defer></script>
+</body>
+</html>
