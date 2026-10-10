@@ -197,7 +197,7 @@ button { font: inherit; color: inherit; }
 .strings { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
 .hero-clef {
   position: absolute; z-index: -1; left: calc(var(--gutter) + 6px); top: 50%;
-  height: min(78vh, 720px); width: auto; transform: translateY(-50%);
+  height: min(66vh, 620px); width: auto; transform: translateY(-50%);
   overflow: visible; pointer-events: none;
 }
 .hero-clef path { fill: rgba(172, 146, 119, 0); stroke: var(--bronze); stroke-width: 5; vector-effect: non-scaling-stroke; }
@@ -339,7 +339,7 @@ button { font: inherit; color: inherit; }
 @media (max-width: 600px) { .jalons { grid-template-columns: repeat(2, 1fr); row-gap: 20px; } }
 
 /* ---------- Agenda ---------- */
-.agenda-staff { position: absolute; left: 0; right: 0; top: 260px; height: 49px; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none; opacity: .25; }
+.agenda-staff { position: absolute; left: 0; right: 0; bottom: -40px; height: 49px; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none; opacity: .25; }
 .agenda-staff i { height: 1px; background: var(--noir); }
 .events { list-style: none; margin: 0; padding: 0; }
 .event {
@@ -402,8 +402,8 @@ button { font: inherit; color: inherit; }
 .seat-arc { fill: rgba(172, 146, 119, .12); stroke: var(--bronze); stroke-width: 1; cursor: pointer; transition: fill .3s; }
 .seat-arc:hover, .seat-arc.on { fill: rgba(172, 146, 119, .5); }
 .seat-dot { fill: var(--laiton); }
-.seat-label { fill: var(--papier); font-family: var(--sans); font-size: 13px; font-weight: 600; pointer-events: none; }
-.seat-count { fill: var(--laiton); font-family: var(--serif); font-size: 15px; pointer-events: none; }
+.seat-label { fill: var(--papier); font-family: var(--sans); font-size: 13px; font-weight: 600; pointer-events: none; paint-order: stroke; stroke: var(--scene); stroke-width: 4px; stroke-linejoin: round; }
+.seat-count { fill: var(--laiton); font-family: var(--serif); font-size: 15px; pointer-events: none; paint-order: stroke; stroke: var(--scene); stroke-width: 4px; }
 .podium { fill: var(--bronze); }
 .seating-total { font-family: var(--serif); font-size: 1.4rem; margin: 0 0 8px; }
 .seating-total strong { display: block; font-size: 5rem; line-height: 1; font-weight: 400; color: var(--laiton); }

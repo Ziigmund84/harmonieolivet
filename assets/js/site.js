@@ -380,15 +380,27 @@
     const paths = {};
     ['quarter', 'eighth', 'sixteenth', 'half', 'sharp', 'flat'].forEach(k => { if (G[k]) paths[k] = new Path2D(G[k].d); });
     const kinds = Object.keys(paths);
-    const gap = () => Math.max(16, Math.min(30, H * .032));
-    const top = () => H * .5 + (W < 760 ? H * .16 : H * .2);
+    // La portée est calée sur la clé de sol : mêmes proportions que dans la police (interligne = 250 unités)
+    let GAP = 24, TOP = 300;
+    const gap = () => GAP;
+    const top = () => TOP;
+    function layout() {
+      const svg = $('#heroClef'); const c = cv.getBoundingClientRect(); const r = svg.getBoundingClientRect();
+      const vb = svg.viewBox.baseVal;
+      if (r.height > 0 && vb && vb.height) {
+        const unit = r.height / vb.height;
+        GAP = 250 * unit;
+        TOP = r.top - c.top + (-1000 - vb.y) * unit;
+      } else { GAP = Math.max(16, H * .05); TOP = H * .45; }
+    }
     function resize() {
       dpr = Math.min(2, window.devicePixelRatio || 1);
       W = cv.clientWidth; H = cv.clientHeight; cv.width = W * dpr; cv.height = H * dpr;
+      layout();
       lines = Array.from({ length: N }, () => Array.from({ length: SEG + 1 }, () => ({ y: 0, v: 0 })));
     }
     function spawn(x, step, kind) {
-      notes.push({ x: x ?? -40, step: step ?? Math.floor(Math.random() * 11) - 1, kind: kind || kinds[Math.floor(Math.random() * kinds.length)], life: 0, speed: 0.35 + Math.random() * .5, wob: Math.random() * 6.28, alpha: 0 });
+      notes.push({ x: x ?? -40, step: step ?? Math.floor(Math.random() * 11) - 1, kind: kind || kinds[Math.floor(Math.random() * kinds.length)], life: 0, speed: 0.25 + Math.random() * .35, wob: Math.random() * 6.28, alpha: 0 });
     }
     function frame() {
       requestAnimationFrame(frame);
@@ -414,11 +426,11 @@
           const y = baseY + L[i].y + wave; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
         }
         const grad = ctx.createLinearGradient(0, 0, W, 0);
-        grad.addColorStop(0, 'rgba(172,146,119,0)'); grad.addColorStop(.12, 'rgba(172,146,119,.55)'); grad.addColorStop(.85, 'rgba(217,196,163,.55)'); grad.addColorStop(1, 'rgba(217,196,163,0)');
+        grad.addColorStop(0, 'rgba(172,146,119,0)'); grad.addColorStop(.1, 'rgba(172,146,119,.42)'); grad.addColorStop(.85, 'rgba(217,196,163,.32)'); grad.addColorStop(1, 'rgba(217,196,163,0)');
         ctx.strokeStyle = grad; ctx.lineWidth = 1; ctx.stroke();
       }
       // notes qui défilent sur la portée
-      if (!reduce && notes.length < 14 && Math.random() < .02) spawn();
+      if (!reduce && notes.length < 4 && Math.random() < .006) spawn();
       for (let k = notes.length - 1; k >= 0; k--) {
         const n = notes[k]; n.x += n.speed; n.life++;
         n.alpha = Math.min(1, n.alpha + .02) * (n.x > W - 80 ? Math.max(0, (W - n.x) / 80) : 1);
@@ -426,9 +438,9 @@
         const li = N - 1 - Math.max(0, Math.min(N - 1, Math.round(n.step / 2)));
         const seg = Math.max(0, Math.min(SEG, Math.round(n.x / W * SEG)));
         const yy = y0 + (8 - n.step) * g / 2 + lines[li][seg].y + Math.sin(t * 2 + n.wob) * 1.2;
-        const s = g * 1.9 / 1000;
+        const s = g / 250;
         const gb = G[n.kind].bb;
-        ctx.save(); ctx.globalAlpha = n.alpha * .9; ctx.translate(n.x, yy); ctx.scale(s, s);
+        ctx.save(); ctx.globalAlpha = n.alpha * (n.user ? .9 : .38); ctx.translate(n.x, yy); ctx.scale(s, s);
         ctx.translate(-gb[0], -(gb[1] + gb[3]) + 130);
         ctx.fillStyle = n.kind === 'sharp' || n.kind === 'flat' ? '#7d6750' : '#d9c4a3';
         ctx.fill(paths[n.kind]); ctx.restore();
@@ -449,12 +461,12 @@
       const g = gap(), y0 = top();
       const step = Math.round(8 - (y - y0) / (g / 2));
       const st = Math.max(-2, Math.min(10, step));
-      spawn(x, st, ['quarter', 'eighth', 'sixteenth'][Math.floor(Math.random() * 3)]);
+      spawn(x, st, ['quarter', 'eighth', 'sixteenth'][Math.floor(Math.random() * 3)]); notes[notes.length - 1].user = true;
       const li = N - 1 - Math.max(0, Math.min(N - 1, Math.round(st / 2))); const seg = Math.round(x / W * SEG);
       for (let i = -6; i <= 6; i++) { const q = lines[li][seg + i]; if (q) q.v += 7 * (1 - Math.abs(i) / 7); }
       Sound.playIndex(Math.max(0, Math.min(9, st + 1)));
     });
-    for (let i = 0; i < 6; i++) spawn(Math.random() * cv.clientWidth * .9);
+    for (let i = 0; i < 2; i++) spawn(cv.clientWidth * (.45 + i * .3));
     new IntersectionObserver(([en]) => { visible = en.isIntersecting; }).observe(hero);
     frame();
   }
