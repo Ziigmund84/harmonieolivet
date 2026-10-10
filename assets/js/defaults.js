@@ -1,13 +1,14 @@
 /* Contenu par défaut : utilisé si la base est injoignable, et comme modèle pour l'admin. */
 (function () {
   const M = 'https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/media/legacy/';
+  const MD = 'https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/media/thumbs/md/legacy/';
   window.HO_MEDIA_BASE = M;
   window.HO_DEFAULTS = {
     hero: {
       surtitre: 'Orchestre d’harmonie · Olivet, Loiret',
       titre: 'Harmonie d’Olivet',
       accroche: 'Créé en 2003, l’orchestre réunit une soixantaine de musiciens et propose des concerts de qualité tout au long de l’année.',
-      image: M + 'site/bandeau-2024.jpg',
+      image: MD + 'site/bandeau-2024.jpg',
       bouton: 'Voir l’agenda',
       bouton2: 'Rejoindre l’orchestre'
     },
@@ -24,13 +25,13 @@
       repetitions: 'Le mercredi, de 18 h 45 à 20 h 45',
       lieu_repetitions: 'Conservatoire d’Olivet, rue Michel Roques, 45160 Olivet',
       adhesion: 'Les musiciens extérieurs au Conservatoire sont les bienvenus, moyennant une cotisation annuelle de 40 €.',
-      photos: [1, 2, 3, 4, 5, 6].map(i => M + 'orchestre/' + i + '.jpg')
+      photos: [1, 2, 3, 4, 5, 6].map(i => MD + 'orchestre/' + i + '.jpg')
     },
     direction: {
       titre: 'Direction musicale',
       nom: 'Nicolas Burgevin',
       role: 'Directeur musical',
-      portrait: M + 'directeur/portrait.jpg',
+      portrait: MD + 'directeur/portrait.jpg',
       texte: 'Nicolas Burgevin a effectué l’essentiel de sa formation au Conservatoire d’Orléans, en saxophone et en musique de chambre : diplôme de musique de chambre en 1997, prix de saxophone en 2000, diplôme d’État de professeur de saxophone en 2007.\n\nIl enseigne le saxophone au Conservatoire d’Olivet et à l’école municipale de musique de Meung-sur-Loire. Musicien d’orchestre et de nombreux ensembles de la région Centre, il est membre de l’Harmonie de la Région Centre et co-encadre les sessions de l’orchestre d’harmonie Odéon. Depuis 2011, il préside l’ensemble de saxophones « Val de Sax ».\n\nPassionné de jazz et ouvert aux esthétiques contemporaines, il joue régulièrement avec le Mazij Quintet et participe à des projets de big band.',
       jalons: [
         { annee: '1997', texte: 'Diplôme de musique de chambre' },
@@ -66,7 +67,7 @@
         { pupitre: 'Tubas', places: 8 },
         { pupitre: 'Percussions', places: 6 }
       ],
-      photos: [1, 2, 3, 4, 5, 6, 7, 8].map(i => M + 'stage/photo-' + i + '.jpg')
+      photos: [1, 2, 3, 4, 5, 6, 7, 8].map(i => MD + 'stage/photo-' + i + '.jpg')
     },
     contact: {
       titre: 'Contact',

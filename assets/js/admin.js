@@ -36,7 +36,16 @@
     const path = `${folder}/${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${Date.now().toString(36)}-${slug(file.name.replace(/\.\w+$/, ''))}.${r.ext}`;
     const { error } = await sb.storage.from(C.storageBucket).upload(path, r.blob, { contentType: r.type, cacheControl: '31536000', upsert: false });
     if (error) throw error;
-    return { url: sb.storage.from(C.storageBucket).getPublicUrl(path).data.publicUrl, w: r.w, h: r.h };
+    let thumb = null;
+    if (/^image\/(jpeg|png|webp)$/.test(file.type)) {
+      try {
+        const t = await resizeImage(file, 640, .78);
+        const tp = 'thumbs/' + path.replace(/\.\w+$/, '.jpg');
+        const { error: te } = await sb.storage.from(C.storageBucket).upload(tp, t.blob, { contentType: 'image/jpeg', cacheControl: '31536000', upsert: false });
+        if (!te) thumb = sb.storage.from(C.storageBucket).getPublicUrl(tp).data.publicUrl;
+      } catch (e) { console.warn('Miniature non créée', e); }
+    }
+    return { url: sb.storage.from(C.storageBucket).getPublicUrl(path).data.publicUrl, thumb, w: r.w, h: r.h };
   }
   function pickFiles(multiple = false) {
     return new Promise(res => {
@@ -343,7 +352,7 @@
     const thumbs = (items) => {
       const w = h(`<div class="thumbs"></div>`).firstElementChild;
       items.forEach(m => {
-        const t = h(`<div class="th ${m.published ? '' : 'off'}"><img src="${esc(m.image_url)}" alt="" loading="lazy"><div class="b">
+        const t = h(`<div class="th ${m.published ? '' : 'off'}"><img src="${esc(m.thumb_url || m.image_url)}" alt="" loading="lazy"><div class="b">
           ${m.kind === 'photo' ? '' : `<input value="${esc(m.title || '')}" placeholder="Titre" data-title>`}
           <div class="row-actions"><button class="btn small" data-vis>${m.published ? 'Masquer' : 'Afficher'}</button><button class="btn small danger" data-del title="Supprimer">Suppr.</button></div></div></div>`).firstElementChild;
         const ti = $('[data-title]', t);
@@ -358,8 +367,8 @@
     if (galTab !== 'photo') {
       const items = data.filter(m => m.kind === galTab);
       body.append(dropZone(`Glissez ici ${galTab === 'visuel' ? 'des affiches' : 'des articles de presse'} (JPG, PNG).`, async (f, i) => {
-        const { url, w, h: hh } = await upload(f, galTab === 'visuel' ? 'visuels' : 'presse');
-        const { error: er } = await sb.from('media').insert({ kind: galTab, image_url: url, title: f.name.replace(/\.\w+$/, '').replace(/[-_]/g, ' '), sort: -Date.now() / 1000 + i, year: new Date().getFullYear(), width: w, height: hh });
+        const { url, thumb, w, h: hh } = await upload(f, galTab === 'visuel' ? 'visuels' : 'presse');
+        const { error: er } = await sb.from('media').insert({ kind: galTab, image_url: url, thumb_url: thumb, title: f.name.replace(/\.\w+$/, '').replace(/[-_]/g, ' '), sort: -Date.now() / 1000 + i, year: new Date().getFullYear(), width: w, height: hh });
         if (er) throw er;
       }));
       body.append(items.length ? thumbs(items) : h('<p class="empty">Rien pour l’instant.</p>'));
@@ -380,8 +389,8 @@
         er ? fail(er) : toast('Album enregistré.');
       };
       body.append(dropZone('Glissez ici des photos à ajouter à cet album.', async (f, i) => {
-        const { url, w, h: hh } = await upload(f, 'albums/' + a.key);
-        const { error: er } = await sb.from('media').insert({ kind: 'photo', image_url: url, album: a.key, album_title: a.title, album_date: a.date, title: a.title, sort: a.items.length + i, width: w, height: hh });
+        const { url, thumb, w, h: hh } = await upload(f, 'albums/' + a.key);
+        const { error: er } = await sb.from('media').insert({ kind: 'photo', image_url: url, thumb_url: thumb, album: a.key, album_title: a.title, album_date: a.date, title: a.title, sort: a.items.length + i, width: w, height: hh });
         if (er) throw er;
       }));
       body.append(thumbs(a.items));
@@ -396,13 +405,13 @@
       toast('Envoi des photos…');
       let n = 0;
       for (const f of files) {
-        try { const { url, w, h: hh } = await upload(f, 'albums/' + key); const { error: er } = await sb.from('media').insert({ kind: 'photo', image_url: url, album: key, album_title: t, album_date: e.target.d.value.trim(), title: t, sort: n, width: w, height: hh }); if (er) throw er; n++; } catch (er) { fail(er, 'Le téléversement'); }
+        try { const { url, thumb, w, h: hh } = await upload(f, 'albums/' + key); const { error: er } = await sb.from('media').insert({ kind: 'photo', image_url: url, thumb_url: thumb, album: key, album_title: t, album_date: e.target.d.value.trim(), title: t, sort: n, width: w, height: hh }); if (er) throw er; n++; } catch (er) { fail(er, 'Le téléversement'); }
       }
       toast(`Album créé avec ${n} photo${n > 1 ? 's' : ''}.`); galAlbum = key; Views.galerie();
     };
     const grid = h('<div class="albums"></div>').firstElementChild;
     [...albums.values()].reverse().forEach(a => {
-      const b = h(`<button class="alb" type="button"><img src="${esc(a.items[0].image_url)}" alt="" loading="lazy"><div><strong>${esc(a.title)}</strong><span>${esc(a.date)} · ${a.items.length} photo${a.items.length > 1 ? 's' : ''}</span></div></button>`).firstElementChild;
+      const b = h(`<button class="alb" type="button"><img src="${esc(a.items[0].thumb_url || a.items[0].image_url)}" alt="" loading="lazy"><div><strong>${esc(a.title)}</strong><span>${esc(a.date)} · ${a.items.length} photo${a.items.length > 1 ? 's' : ''}</span></div></button>`).firstElementChild;
       b.onclick = () => { galAlbum = a.key; Views.galerie(); };
       grid.append(b);
     });

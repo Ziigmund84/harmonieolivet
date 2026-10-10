@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/site.css?v=3">
+  <link rel="stylesheet" href="assets/css/site.css?v=4">
 </head>
 <body>
   <a class="skip" href="#orchestre">Aller au contenu</a>
@@ -55,12 +55,13 @@
   </nav>
 
   <div class="scroll-progress" aria-hidden="true"><span id="progressBar"></span></div>
+  <div class="curtain" id="curtain" aria-hidden="true"><svg id="curtainClef" viewBox="0 0 711 1832"><path id="curtainPath"/></svg></div>
 
   <main id="main">
     <!-- I. Ouverture -->
     <section class="hero" id="ouverture" data-title="Ouverture" data-pitch="0">
       <div class="hero-bg" aria-hidden="true">
-        <img id="heroImage" src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/media/legacy/site/bandeau-2024.jpg" alt="">
+        <img id="heroImage" src="https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/media/thumbs/md/legacy/site/bandeau-2024.jpg" alt="" fetchpriority="high">
         <div class="spot"></div>
       </div>
       <canvas class="strings" id="strings" aria-hidden="true"></canvas>
@@ -322,9 +323,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-  <script src="assets/js/config.js?v=3"></script>
-  <script src="assets/js/glyphs.js?v=3"></script>
-  <script src="assets/js/defaults.js?v=3"></script>
-  <script src="assets/js/site.js?v=3"></script>
+  <script src="assets/js/config.js?v=4"></script>
+  <script src="assets/js/glyphs.js?v=4"></script>
+  <script src="assets/js/defaults.js?v=4"></script>
+  <script src="assets/js/site.js?v=4"></script>
 </body>
 </html>

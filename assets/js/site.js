@@ -9,6 +9,23 @@
   const D = window.HO_DEFAULTS;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hasGsap = !!window.gsap;
+  /* Mode allégé : machines modestes (peu de cœurs / mémoire) ou cadence mesurée trop basse */
+  const Perf = {
+    lite: (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4,
+    apply() { document.documentElement.classList.toggle('lite', this.lite); },
+    watch() {
+      // mesure la cadence réelle pendant 2,5 s après l'arrivée ; sous ~45 i/s on allège
+      let n = 0, t0 = 0, slow = 0, last = 0;
+      const tick = t => {
+        if (!t0) { t0 = last = t; return requestAnimationFrame(tick); }
+        if (t - last > 22) slow++; last = t; n++;
+        if (t - t0 < 2500) return requestAnimationFrame(tick);
+        if (slow / n > .25 && !this.lite) { this.lite = true; this.apply(); document.dispatchEvent(new Event('ho:lite')); }
+      };
+      requestAnimationFrame(tick);
+    }
+  };
+  Perf.apply();
   const MONTHS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
 
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -34,7 +51,7 @@
         sb.from('settings').select('key,value'),
         sb.from('events').select('*').eq('published', true).order('starts_at'),
         sb.from('posts').select('*').eq('published', true).order('published_at', { ascending: false }),
-        sb.from('media').select('id,kind,title,year,image_url,sort,album,album_title,album_date,width,height').eq('published', true).order('sort').limit(5000)
+        sb.from('media').select('id,kind,title,year,image_url,thumb_url,sort,album,album_title,album_date,width,height').eq('published', true).order('sort').limit(5000)
       ]);
       (s.data || []).forEach(r => { data.settings[r.key] = Object.assign({}, D[r.key] || {}, r.value || {}); });
       data.events = e.data || [];
@@ -63,6 +80,8 @@
       path.setAttribute('d', p.d);
       const [x, y, w, h] = p.bb;
       $('#heroClef').setAttribute('viewBox', `${x - 20} ${y - 20} ${w + 40} ${h + 40}`);
+      $('#curtainPath').setAttribute('d', p.d);
+      $('#curtainClef').setAttribute('viewBox', `${x - 20} ${y - 20} ${w + 40} ${h + 40}`);
     }
     if (G.quarter) {
       const g = G.eighth;
@@ -87,7 +106,7 @@
         <span class="ml">${esc(c.label)}</span>
       </div>`).join('');
     $('#orchReelTrack').innerHTML = (S.orchestre.photos || []).map((u, i) =>
-      `<figure><img src="${esc(u)}" alt="L’Harmonie d’Olivet en concert, photo ${i + 1}" loading="lazy" data-lb="orch" data-i="${i}"></figure>`).join('');
+      `<figure><img src="${esc(u)}" alt="L’Harmonie d’Olivet en concert, photo ${i + 1}" loading="lazy" decoding="async" data-lb="orch" data-i="${i}"></figure>`).join('');
   }
 
   function renderDirection(S) {
@@ -143,7 +162,7 @@
       const txt = String(p.content || '');
       const short = txt.length > 240 ? txt.slice(0, 240).replace(/\s+\S*$/, '') + '…' : txt;
       return `<article class="post">
-        ${p.image_url ? `<div class="post-img"><img src="${esc(p.image_url)}" alt="" loading="lazy" data-lb="posts"></div>` : ''}
+        ${p.image_url ? `<div class="post-img"><img src="${esc(p.image_url)}" alt="" loading="lazy" decoding="async" data-lb="posts"></div>` : ''}
         <div class="post-body">
           <time datetime="${esc(p.published_at)}">${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}</time>
           <h3>${esc(p.title)}</h3>
@@ -221,7 +240,7 @@
     else { a.href = '#contact'; a.removeAttribute('target'); a.textContent = 'Demander une inscription'; a.addEventListener('click', () => { const s = $('#cSubject'); if (s) s.value = 'Stage d’été'; }); }
     $('#stageAffiche').hidden = !S.stage.affiche;
     $('#stageAffiche').onclick = () => Lightbox.open([{ src: S.stage.affiche, cap: S.stage.titre + ' — ' + (S.stage.edition || '') }], 0);
-    $('#stagePhotos').innerHTML = (S.stage.photos || []).slice(0, 8).map((u, i) => `<figure><img src="${esc(u)}" alt="Stage d’orchestre, photo ${i + 1}" loading="lazy" data-lb="stage" data-i="${i}"></figure>`).join('');
+    $('#stagePhotos').innerHTML = (S.stage.photos || []).slice(0, 8).map((u, i) => `<figure><img src="${esc(u)}" alt="Stage d’orchestre, photo ${i + 1}" loading="lazy" decoding="async" data-lb="stage" data-i="${i}"></figure>`).join('');
   }
 
   /* Galerie */
@@ -253,10 +272,10 @@
       const L = this.list(); const from = this.shown; const to = Math.min(L.length, from + (this.tab === 'photo' ? this.PAGE : this.PAGE * 2));
       const html = L.slice(from, to).map((x, i) => {
         if (this.tab === 'photo') {
-          const imgs = x.items.slice(0, 3).map(m => `<img src="${esc(m.image_url)}" alt="" loading="lazy">`).join('');
+          const imgs = x.items.slice(0, 3).map(m => `<img src="${esc(m.thumb_url || m.image_url)}" alt="" loading="lazy" decoding="async">`).join('');
           return `<button class="album" type="button" data-i="${from + i}"><div class="stack">${imgs}</div><h3>${esc(x.title)}</h3><span>${esc(x.date)} · ${x.items.length} photo${x.items.length > 1 ? 's' : ''}</span></button>`;
         }
-        return `<button class="tile ${this.tab === 'presse' ? 'press' : ''}" type="button" data-i="${from + i}"><img src="${esc(x.image_url)}" alt="${esc(x.title || '')}" loading="lazy"><span>${esc(x.title || '')}</span></button>`;
+        return `<button class="tile ${this.tab === 'presse' ? 'press' : ''}" type="button" data-i="${from + i}"><img src="${esc(x.thumb_url || x.image_url)}" alt="${esc(x.title || '')}" loading="lazy" decoding="async"><span>${esc(x.title || '')}</span></button>`;
       }).join('');
       const frag = document.createRange().createContextualFragment(html);
       const nodes = [...frag.children];
@@ -338,6 +357,7 @@
     go(d) { this.i = (this.i + d + this.items.length) % this.items.length; this.render(); Sound.playIndex(this.i % 8); },
     render() {
       const it = this.items[this.i]; $('#lbImg').src = it.src; $('#lbCap').textContent = it.cap || '';
+      const nx = this.items[(this.i + 1) % this.items.length]; if (nx && nx !== it) { const pre = new Image(); pre.decoding = 'async'; pre.src = nx.src; }
       const many = this.items.length > 1; this.el.querySelector('.lb-prev').hidden = !many; this.el.querySelector('.lb-next').hidden = !many;
       if (hasGsap && !reduce) gsap.fromTo('#lbImg', { opacity: 0, scale: .97 }, { opacity: 1, scale: 1, duration: .45, ease: 'power2.out' });
     }
@@ -376,7 +396,7 @@
   function initStrings() {
     const cv = $('#strings'); const ctx = cv.getContext('2d');
     let W = 0, H = 0, dpr = 1, lines = [], notes = [], mouse = { x: -1e4, y: -1e4, vx: 0, vy: 0 }, visible = true, t = 0;
-    const N = 5, SEG = 90;
+    const N = 5; let SEG = Perf.lite ? 44 : 64; let grad = null;
     const paths = {};
     ['quarter', 'eighth', 'sixteenth', 'half', 'sharp', 'flat'].forEach(k => { if (G[k]) paths[k] = new Path2D(G[k].d); });
     const kinds = Object.keys(paths);
@@ -394,18 +414,22 @@
       } else { GAP = Math.max(16, H * .05); TOP = H * .45; }
     }
     function resize() {
-      dpr = Math.min(2, window.devicePixelRatio || 1);
+      dpr = Math.min(Perf.lite ? 1 : 1.5, window.devicePixelRatio || 1);
       W = cv.clientWidth; H = cv.clientHeight; cv.width = W * dpr; cv.height = H * dpr;
       layout();
+      grad = ctx.createLinearGradient(0, 0, W, 0);
+      grad.addColorStop(0, 'rgba(172,146,119,0)'); grad.addColorStop(.1, 'rgba(172,146,119,.42)'); grad.addColorStop(.85, 'rgba(217,196,163,.32)'); grad.addColorStop(1, 'rgba(217,196,163,0)');
       lines = Array.from({ length: N }, () => Array.from({ length: SEG + 1 }, () => ({ y: 0, v: 0 })));
     }
     function spawn(x, step, kind) {
       notes.push({ x: x ?? -40, step: step ?? Math.floor(Math.random() * 11) - 1, kind: kind || kinds[Math.floor(Math.random() * kinds.length)], life: 0, speed: 0.25 + Math.random() * .35, wob: Math.random() * 6.28, alpha: 0 });
     }
+    let running = false, odd = false;
     function frame() {
+      if (!visible || document.hidden) { running = false; return; }
       requestAnimationFrame(frame);
-      if (!visible) return;
-      t += 1 / 60;
+      if (Perf.lite) { odd = !odd; if (odd) return; }
+      t += Perf.lite ? 1 / 30 : 1 / 60;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
       const g = gap(), y0 = top();
@@ -414,8 +438,8 @@
         const L = lines[li]; const baseY = y0 + li * g;
         for (let i = 0; i <= SEG; i++) {
           const p = L[i]; const x = i / SEG * W;
-          const dx = x - mouse.x, dy = baseY + p.y - mouse.y; const dist = Math.hypot(dx, dy);
-          if (dist < 90) p.v += (mouse.vy * .06) * (1 - dist / 90);
+          const dy = baseY + p.y - mouse.y;
+          if (dy < 90 && dy > -90) { const dx = x - mouse.x; if (dx < 90 && dx > -90) { const dist = Math.sqrt(dx * dx + dy * dy); if (dist < 90) p.v += (mouse.vy * .06) * (1 - dist / 90); } }
           const left = i > 0 ? L[i - 1].y : 0, right = i < SEG ? L[i + 1].y : 0;
           p.v += (left + right - 2 * p.y) * .18 - p.y * .012; p.v *= .955;
         }
@@ -425,8 +449,6 @@
           const x = i / SEG * W; const wave = Math.sin(i * .09 + t * 1.1 + li * .7) * 2.2 * Math.sin(i / SEG * Math.PI);
           const y = baseY + L[i].y + wave; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
         }
-        const grad = ctx.createLinearGradient(0, 0, W, 0);
-        grad.addColorStop(0, 'rgba(172,146,119,0)'); grad.addColorStop(.1, 'rgba(172,146,119,.42)'); grad.addColorStop(.85, 'rgba(217,196,163,.32)'); grad.addColorStop(1, 'rgba(217,196,163,0)');
         ctx.strokeStyle = grad; ctx.lineWidth = 1; ctx.stroke();
       }
       // notes qui défilent sur la portée
@@ -467,51 +489,88 @@
       Sound.playIndex(Math.max(0, Math.min(9, st + 1)));
     });
     for (let i = 0; i < 2; i++) spawn(cv.clientWidth * (.45 + i * .3));
-    new IntersectionObserver(([en]) => { visible = en.isIntersecting; }).observe(hero);
-    frame();
+    const wake = () => { if (visible && !running && !document.hidden) { running = true; requestAnimationFrame(frame); } };
+    new IntersectionObserver(([en]) => { visible = en.intersectionRatio > .15; wake(); }, { threshold: [0, .15, .3] }).observe(hero);
+    document.addEventListener('visibilitychange', wake);
+    document.addEventListener('ho:lite', () => { SEG = 44; resize(); });
+    visible = true; wake();
   }
 
   /* ---------------- Navigation ---------------- */
+  /* Déplacement vers une section : court trajet = défilement doux ; long trajet = rideau
+     (on évite de faire défiler toute la page, ce qui saccade sur les machines modestes). */
+  let navBusy = false;
+  function goTo(target) {
+    if (!target || navBusy) return;
+    const L = window.__lenis;
+    const dist = Math.abs(target.getBoundingClientRect().top);
+    if (!L || reduce) { target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); return; }
+    if (dist < innerHeight * 1.8) {
+      L.scrollTo(target, { duration: Math.min(1, .45 + dist / innerHeight * .3), easing: t => 1 - Math.pow(1 - t, 3) });
+      return;
+    }
+    navBusy = true;
+    const cur = $('#curtain');
+    gsap.timeline({ onComplete: () => { navBusy = false; } })
+      .set(cur, { display: 'block', yPercent: 100 })
+      .to(cur, { yPercent: 0, duration: .32, ease: 'power3.in' })
+      .add(() => { L.scrollTo(target, { immediate: true, force: true }); ScrollTrigger.update(); })
+      .to(cur, { yPercent: -100, duration: .45, ease: 'power3.out', delay: .05 })
+      .set(cur, { display: 'none' });
+  }
+
   function initNav() {
     const secs = $$('main > section[id]');
     const ul = $('#staffNotes');
-    ul.innerHTML = secs.map((s, i) => `<li style="top:${(i / (secs.length - 1) * 100).toFixed(2)}%"><a href="#${s.id}" style="left:${(+s.dataset.pitch * 12.5).toFixed(1)}%" aria-label="${esc(s.dataset.title)}"><span class="head"></span><span class="lbl">${esc(s.dataset.title)}</span></a></li>`).join('');
+    const nav = $('#staffNav');
+    // pitch 0 → do4 (ligne supplémentaire), 1 → ré4, 2 → mi4 (1re ligne)… 7 → do5 : gamme de do majeur
+    ul.innerHTML = secs.map((s, i) => {
+      const step = +s.dataset.pitch - 2;
+      return `<li style="top:${(i / (secs.length - 1) * 100).toFixed(2)}%"><a href="#${s.id}" class="${step <= -2 ? 'ledger' : ''}" style="left:${(step * 12.5).toFixed(1)}%" data-step="${step}" aria-label="${esc(s.dataset.title)}"><span class="head"></span><span class="lbl">${esc(s.dataset.title)}</span></a></li>`;
+    }).join('');
+    $$('a', ul).forEach(a => a.addEventListener('pointerenter', () => Sound.playStep(+a.dataset.step, .5, .06)));
     const links = [...$$('a', ul), ...$$('#menu a')];
     links.forEach(a => a.addEventListener('click', e => {
-      const id = a.getAttribute('href'); const target = $(id); if (!target) return;
+      const target = $(a.getAttribute('href')); if (!target) return;
       e.preventDefault();
+      const wasOpen = $('#menu').classList.contains('open');
       $('#menu').classList.remove('open'); $('#burger').setAttribute('aria-expanded', 'false');
       if (window.__lenis) __lenis.start();
-      if (window.__lenis) __lenis.scrollTo(target, { offset: 0, duration: 1.6 }); else target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
-      const sec = secs.find(s => '#' + s.id === id); if (sec) Sound.playIndex(+sec.dataset.pitch);
+      if (a.dataset.step) Sound.playStep(+a.dataset.step);
+      wasOpen ? setTimeout(() => goTo(target), 350) : goTo(target);
     }));
     $$('a[href^="#"]').filter(a => !links.includes(a)).forEach(a => a.addEventListener('click', e => {
-      const t = $(a.getAttribute('href')); if (!t || !window.__lenis) return; e.preventDefault(); __lenis.scrollTo(t, { duration: 1.4 });
+      const t = $(a.getAttribute('href')); if (!t || !window.__lenis) return; e.preventDefault(); goTo(t);
     }));
     $('#burger').addEventListener('click', () => {
       const m = $('#menu'); const open = !m.classList.contains('open'); m.classList.toggle('open', open);
       $('#burger').setAttribute('aria-expanded', String(open));
       if (window.__lenis) open ? __lenis.stop() : __lenis.start();
     });
-    // section active
+    // section active (+ couleur de la portée selon le fond : plus de mix-blend-mode, coûteux)
     let current = null;
-    const setActive = id => {
-      if (id === current) return; current = id;
-      $$('a', ul).forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
-      $$('#menu a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+    const setActive = sec => {
+      if (sec.id === current) return; current = sec.id;
+      $$('a', ul).forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + sec.id));
+      $$('#menu a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + sec.id));
+      nav.dataset.tone = sec.classList.contains('paper') || sec.classList.contains('bronze') ? 'ink' : 'light';
     };
-    const io = new IntersectionObserver(ents => ents.forEach(en => { if (en.isIntersecting) setActive(en.target.id); }), { rootMargin: '-45% 0px -50% 0px' });
+    const io = new IntersectionObserver(ents => ents.forEach(en => { if (en.isIntersecting) setActive(en.target); }), { rootMargin: '-45% 0px -50% 0px' });
     secs.forEach(s => io.observe(s));
-    // barre du haut + tête de lecture
-    let lastY = 0;
+    // barre du haut + tête de lecture (transformations uniquement, sans recalcul de mise en page)
+    let lastY = 0, navH = nav.clientHeight, scrolled = null, hidden = null, maxY = 1;
+    const measure = () => { navH = nav.clientHeight; maxY = Math.max(1, document.documentElement.scrollHeight - innerHeight); };
+    addEventListener('resize', measure); if (window.ScrollTrigger) ScrollTrigger.addEventListener('refresh', measure);
+    const bar = $('#progressBar'), ph = $('#playhead'), tb = $('#topbar'), menu = $('#menu');
     const onScroll = y => {
-      const max = document.documentElement.scrollHeight - innerHeight; const p = max > 0 ? y / max : 0;
-      $('#progressBar').style.transform = `scaleX(${p})`;
-      $('#playhead').style.top = (p * 100) + '%';
-      const tb = $('#topbar'); tb.classList.toggle('scrolled', y > 40);
-      tb.classList.toggle('hidden', y > lastY && y > innerHeight * .8 && !$('#menu').classList.contains('open'));
-      lastY = y;
+      const p = Math.min(1, Math.max(0, y / maxY));
+      bar.style.transform = `scaleX(${p})`;
+      ph.style.transform = `translate3d(0,${(p * navH).toFixed(1)}px,0)`;
+      const sc = y > 40; if (sc !== scrolled) { scrolled = sc; tb.classList.toggle('scrolled', sc); }
+      const hd = y > lastY + 2 && y > innerHeight * .8 && !menu.classList.contains('open');
+      if (Math.abs(y - lastY) > 2) { if (hd !== hidden) { hidden = hd; tb.classList.toggle('hidden', hd); } lastY = y; }
     };
+    measure();
     if (window.__lenis) __lenis.on('scroll', ({ scroll }) => onScroll(scroll)); else addEventListener('scroll', () => onScroll(scrollY), { passive: true });
     onScroll(scrollY);
   }
@@ -533,7 +592,7 @@
 
     // Défilement doux
     if (window.Lenis) {
-      const lenis = new Lenis({ lerp: .1, smoothWheel: true });
+      const lenis = new Lenis({ smoothWheel: false, syncTouch: false });
       window.__lenis = lenis;
       lenis.on('scroll', ScrollTrigger.update);
       gsap.ticker.add(t => lenis.raf(t * 1000));
@@ -564,7 +623,11 @@
     /* Ruban défilant, accéléré par la vitesse de défilement */
     const track = $('#ribbon');
     const loop = gsap.to(track, { xPercent: -50, repeat: -1, duration: 38, ease: 'none' });
-    ScrollTrigger.create({ onUpdate: s => { const v = gsap.utils.clamp(-6, 6, s.getVelocity() / 300); gsap.to(loop, { timeScale: v >= 0 ? 1 + v : -1 + v, duration: .3, overwrite: true }); gsap.to(loop, { timeScale: 1, duration: 1.2, delay: .3 }); } });
+    let boost = 0;
+    ScrollTrigger.create({ onUpdate: s => { boost = gsap.utils.clamp(-4, 4, s.getVelocity() / 400); } });
+    gsap.ticker.add(() => { boost *= .92; const ts = 1 + boost; if (Math.abs(loop.timeScale() - ts) > .01) loop.timeScale(ts); });
+    // le ruban ne tourne que lorsqu'il est visible
+    ScrollTrigger.create({ trigger: '.ribbon', start: 'top bottom', end: 'bottom top', onToggle: s => s.isActive ? loop.play() : loop.pause() });
 
     /* Titres de section : les lettres tombent comme des notes */
     $$('.sec-title').forEach(t => {
@@ -579,7 +642,7 @@
     /* Textes : les mots s'éclairent au fil de la lecture */
     $$('.reveal-words').forEach(el => {
       const w = splitWords(el);
-      gsap.fromTo(w, { opacity: .14 }, { opacity: 1, stagger: .1, ease: 'none', scrollTrigger: { trigger: el, start: 'top 80%', end: 'bottom 45%', scrub: true } });
+      gsap.fromTo(w, { opacity: .14 }, { opacity: 1, stagger: .1, ease: 'none', scrollTrigger: { trigger: el, start: 'top 80%', end: 'bottom 45%', scrub: .3 } });
     });
     $$('.rich').forEach(el => gsap.from(el.children, { scrollTrigger: { trigger: el, start: 'top 85%' }, y: 24, opacity: 0, duration: .9, stagger: .12, ease: 'power3.out' }));
 
@@ -614,12 +677,13 @@
     const beat = $('#beatPath'), dot = $('#beatDot');
     if (beat) {
       const L = beat.getTotalLength();
-      gsap.set(beat, { strokeDasharray: L, strokeDashoffset: L });
+      const glow = beat.cloneNode(); glow.removeAttribute('id'); glow.setAttribute('class', 'beat-glow'); beat.before(glow);
+      gsap.set([beat, glow], { strokeDasharray: L, strokeDashoffset: L });
       const st = { p: 0 };
       gsap.to(st, {
         p: 1, ease: 'none',
         scrollTrigger: { trigger: '.dir-portrait', start: 'top 70%', end: 'bottom 30%', scrub: .6 },
-        onUpdate: () => { beat.style.strokeDashoffset = L * (1 - st.p); const pt = beat.getPointAtLength(L * st.p); dot.setAttribute('cx', pt.x); dot.setAttribute('cy', pt.y); }
+        onUpdate: () => { beat.style.strokeDashoffset = glow.style.strokeDashoffset = L * (1 - st.p); const pt = beat.getPointAtLength(L * st.p); dot.setAttribute('cx', pt.x); dot.setAttribute('cy', pt.y); }
       });
     }
     gsap.from('.dir-frame', { scrollTrigger: { trigger: '.dir-portrait', start: 'top 85%' }, clipPath: 'inset(100% 0 0 0)', duration: 1.4, ease: 'expo.out' });
@@ -651,7 +715,7 @@
     gsap.from('.stage-info .si', { scrollTrigger: { trigger: '.stage-info', start: 'top 85%' }, y: 40, opacity: 0, duration: .8, stagger: .1, ease: 'power3.out' });
     $$('#stagePhotos figure').forEach((f, i) => {
       gsap.from(f, { scrollTrigger: { trigger: '#stagePhotos', start: 'top 85%' }, clipPath: 'inset(0 0 100% 0)', duration: 1.1, delay: i * .07, ease: 'expo.out' });
-      gsap.fromTo(f.querySelector('img'), { yPercent: -8, scale: 1.15 }, { yPercent: 8, ease: 'none', scrollTrigger: { trigger: f, start: 'top bottom', end: 'bottom top', scrub: true } });
+      if (!Perf.lite) gsap.fromTo(f.querySelector('img'), { yPercent: -8, scale: 1.15 }, { yPercent: 8, ease: 'none', scrollTrigger: { trigger: f, start: 'top bottom', end: 'bottom top', scrub: true } });
     });
 
     /* Contact */
@@ -659,7 +723,7 @@
     gsap.from('.contact-side > *', { scrollTrigger: { trigger: '.contact-side', start: 'top 85%' }, x: 40, opacity: 0, duration: .8, stagger: .1, ease: 'power3.out' });
 
     /* Portées décoratives : légère dérive */
-    $$('.paper-staves').forEach(p => gsap.fromTo(p, { backgroundPositionY: '0px' }, { backgroundPositionY: '-180px', ease: 'none', scrollTrigger: { trigger: p.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } }));
+    if (!Perf.lite) $$('.paper-staves').forEach(p => gsap.fromTo(p, { y: 0 }, { y: -180, ease: 'none', scrollTrigger: { trigger: p.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } }));
 
     addEventListener('load', () => ScrollTrigger.refresh());
   }
@@ -680,6 +744,7 @@
 
   /* ---------------- Démarrage ---------------- */
   async function start() {
+    Perf.watch();
     Sound.init();
     Lightbox.init();
     renderRibbon();
