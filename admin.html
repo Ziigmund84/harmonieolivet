@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Administration — Harmonie d'Olivet</title>
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body>
+  <!-- Écran de connexion -->
+  <section class="auth" id="auth" hidden>
+    <div class="auth-card">
+      <svg class="logo" viewBox="0 0 300 66" aria-label="Harmonie d'Olivet" role="img">
+        <text x="0" y="56" class="logo-h">h</text>
+        <ellipse cx="47" cy="42" rx="13" ry="14.5" class="logo-o" transform="rotate(-14 47 42)"/>
+        <text x="74" y="27" class="logo-orch">Orchestre</text>
+        <text x="74" y="56" class="logo-harm">Harmonie<tspan class="logo-d">d’</tspan><tspan class="logo-ol">Olivet</tspan></text>
+      </svg>
+
+      <form id="loginForm" class="stack">
+        <h1>Espace administration</h1>
+        <label>E-mail<input type="email" name="email" required autocomplete="username"></label>
+        <label>Mot de passe<input type="password" name="password" required autocomplete="current-password"></label>
+        <button class="btn primary" type="submit">Se connecter</button>
+        <button class="link" type="button" id="showForgot">Mot de passe oublié ?</button>
+      </form>
+
+      <form id="forgotForm" class="stack" hidden>
+        <h1>Réinitialiser le mot de passe</h1>
+        <p class="muted">Indiquez votre adresse e-mail : vous recevrez un lien pour choisir un nouveau mot de passe.</p>
+        <label>E-mail<input type="email" name="email" required autocomplete="username"></label>
+        <button class="btn primary" type="submit">Envoyer le lien</button>
+        <button class="link" type="button" id="showLogin">Retour à la connexion</button>
+      </form>
+
+      <form id="newPassForm" class="stack" hidden>
+        <h1>Choisir un nouveau mot de passe</h1>
+        <p class="muted">8 caractères minimum.</p>
+        <label>Nouveau mot de passe<input type="password" name="p1" required minlength="8" autocomplete="new-password"></label>
+        <label>Confirmer<input type="password" name="p2" required minlength="8" autocomplete="new-password"></label>
+        <button class="btn primary" type="submit">Enregistrer le mot de passe</button>
+      </form>
+
+      <p class="msg" id="authMsg" role="status"></p>
+      <a class="back" href="./">← Retour au site</a>
+    </div>
+  </section>
+
+  <!-- Application -->
+  <div class="app" id="app" hidden>
+    <aside class="side">
+      <a href="./" class="side-logo" target="_blank" rel="noopener" title="Voir le site">
+        <svg class="logo" viewBox="0 0 300 66" aria-hidden="true">
+          <text x="0" y="56" class="logo-h">h</text>
+          <ellipse cx="47" cy="42" rx="13" ry="14.5" class="logo-o" transform="rotate(-14 47 42)"/>
+          <text x="74" y="27" class="logo-orch">Orchestre</text>
+          <text x="74" y="56" class="logo-harm">Harmonie<tspan class="logo-d">d’</tspan><tspan class="logo-ol">Olivet</tspan></text>
+        </svg>
+      </a>
+      <nav class="side-nav" id="sideNav">
+        <button data-view="textes" class="active">Textes du site</button>
+        <button data-view="agenda">Agenda</button>
+        <button data-view="posts">Actualités</button>
+        <button data-view="galerie">Galerie</button>
+        <button data-view="messages">Messages <span class="badge" id="msgBadge" hidden></span></button>
+        <button data-view="compte">Mon compte</button>
+      </nav>
+      <div class="side-foot">
+        <p class="who" id="who"></p>
+        <a class="btn ghost small" href="./" target="_blank" rel="noopener">Voir le site</a>
+        <button class="btn ghost small" id="logout" type="button">Se déconnecter</button>
+      </div>
+    </aside>
+    <main class="main" id="view"></main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/defaults.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>
