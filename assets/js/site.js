@@ -509,7 +509,9 @@
       L.scrollTo(target, { duration: Math.min(1, .45 + dist / innerHeight * .3), easing: t => 1 - Math.pow(1 - t, 3) });
       return;
     }
+    if (document.hidden) { L.scrollTo(target, { immediate: true, force: true }); return; }
     navBusy = true;
+    setTimeout(() => { navBusy = false; }, 1600); // sécurité : le menu ne reste jamais bloqué
     const cur = $('#curtain');
     gsap.timeline({ onComplete: () => { navBusy = false; } })
       .set(cur, { display: 'block', yPercent: 100 })
