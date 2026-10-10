@@ -555,6 +555,7 @@
     const S = data.settings;
     bindTexts(S);
     if (pt && pt.dataset.k) dropLetters(pt); // titre modifiable : animé une fois le texte chargé
+    $$('.page-title[data-k], .hero-title[data-k]').forEach(t => t.classList.add('ready'));
     renderFooter(S);
     try { (Pages[PAGE] || (() => { }))(S, data); } catch (e) { console.error(e); }
     initReveal();

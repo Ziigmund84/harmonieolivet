@@ -7,7 +7,7 @@ Les textes eux-mêmes se modifient dans l'espace admin, pas ici.
 """
 from pathlib import Path
 
-VERSION = "6"
+VERSION = "7"
 ROOT = Path(__file__).resolve().parent.parent
 MEDIA = "https://kdcflcvufukagdjycwww.supabase.co/storage/v1/object/public/media/"
 

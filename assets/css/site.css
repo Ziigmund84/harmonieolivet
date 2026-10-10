@@ -519,3 +519,6 @@ button { font: inherit; color: inherit; }
 .copy { margin: 0; font-size: .85rem; color: var(--gris); }
 .copy a { color: var(--gris); }
 @media (max-width: 860px) { .footer-grid { grid-template-columns: 1fr; } }
+
+/* titres modifiables dans l'admin : masqués jusqu'au chargement du vrai texte (évite un changement visible) */
+.page-title[data-k]:not(.ready), .hero-title[data-k]:not(.ready) { visibility: hidden; }
